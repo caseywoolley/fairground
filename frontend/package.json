@@ -1,8 +1,8 @@
 {
-  "name": "nextjs-ethereum-starter-frontend",
-  "author": "@hunterhchang",
+  "name": "fairground-frontend",
+  "author": "@caseywoolley",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "next dev -p 3005",
     "build": "next build",
@@ -19,8 +19,11 @@
     "ipfs-http-client": "^59.0.0",
     "next": "^13.0.4",
     "react": "^18.2.0",
+    "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
-    "wagmi": "^0.8.5"
+    "react-icons": "^4.7.1",
+    "wagmi": "^0.8.5",
+    "zustand": "^4.1.5"
   },
   "devDependencies": {
     "@types/node": "^18.11.9",

@@ -1,11 +1,17 @@
 {
-  "name": "nextjs-ethereum-starter",
-  "version": "1.0.0",
+  "name": "fairground",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "chain": "npx hardhat node",
     "compile": "npx hardhat compile",
-    "deploy": "npx hardhat run scripts/deploy.ts --network localhost",
+    "localhost": "npx hardhat run scripts/deploy/localhost.ts --network localhost",
+    "mainnet": "npx hardhat run scripts/deploy/mainnet.ts --network mainnet",
+    "mumbai": "npx hardhat run scripts/deploy/mumbai.ts --network mumbai",
+    "goerli": "npx hardhat run scripts/deploy/goerli.ts --network goerli",
+    "polygon": "npx hardhat run scripts/network/polygon.ts --network polygon",
+    "dev": "cd frontend && yarn dev && cd..",
+    "devploy": "yarn localhost && yarn dev",
     "test": "hardhat test"
   },
   "devDependencies": {
@@ -23,6 +29,7 @@
     "@types/mocha": "^9.1.1",
     "@types/node": "^18.7.14",
     "chai": "^4.3.6",
+    "dotenv": "^16.0.3",
     "ethers": "^5.7.0",
     "hardhat": "^2.9.9",
     "hardhat-gas-reporter": "^1.0.8",
