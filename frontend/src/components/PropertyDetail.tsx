@@ -25,10 +25,10 @@ export const PropertyDetail: React.FC<PropertyDetailProps> = ({ propId }) => {
 		return <Skeleton height={464} />
 	}
 
-	const { id, currentBid, auctionEnd, rentReset, owner, recordedOwner } = property.details ?? {}
+	const { id, currentBid, auctionEnd, leaseEnd, owner, recordedOwner } = property.details ?? {}
 	const isOwner = account.address === owner
 	const imgSrc = `/images/concept${(Number(id) - 1) % 14}.jpeg`
-	const expired = isExpired(auctionEnd) && isExpired(rentReset)
+	const expired = isExpired(auctionEnd) && isExpired(leaseEnd)
 
 	return (
 		<Box>
@@ -48,7 +48,7 @@ export const PropertyDetail: React.FC<PropertyDetailProps> = ({ propId }) => {
 					</Stack>
 					<DisplayEth value={currentBid} />
 				</Flex>
-				<StatusBadge isOwner={isOwner} auctionEnd={auctionEnd} rentReset={rentReset} />
+				<StatusBadge property={property.details} />
 			</Box>
 		</Box>
 	)

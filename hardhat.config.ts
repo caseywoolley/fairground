@@ -18,6 +18,9 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       chainId: 1337,
+      accounts: {
+        accountsBalance: '1000000000000000000000000'
+      },
       mining: {
         auto: true,
         interval: 1000

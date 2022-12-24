@@ -9,30 +9,31 @@ contract Fairground {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
 
-    uint8 private constant _priceToRentRatio = 20;
-    uint48 private constant _rentPeriod = 10 minutes;
-    uint48 private constant _auctionDuration = 3 minutes;
+    address public admin;
+    uint8 public priceToRentRatio = 20;
+    uint48 public LeaseDuration = 10 minutes;
+    uint48 public auctionDuration = 3 minutes;
 
     uint256 private _totalBidValue = 0;
     mapping(address => mapping(uint256 => uint256)) private _userBids;
     mapping(uint256 => address) private _topBidders;
     mapping(uint256 => uint256) private _bidDeadlines;
-    mapping(uint256 => uint256) private _rentResetDate;
+    mapping(uint256 => uint256) private _leaseEndDate;
     mapping(uint256 => uint256) private _reservePrices;
     mapping(uint256 => address) private _owners;
 
-    event LogReserve(
+    event ReserveIncreased(
         uint256 indexed _id,
         address indexed _from,
         uint256 _value
     );
-    event LogBid(uint256 indexed _id, address indexed _from, uint256 _value);
+    event BidPlaced(uint256 indexed _id, address indexed _from, uint256 _value);
 
     struct PropertyDetails {
         uint256 id;
         uint256 currentBid;
         uint256 auctionEnd;
-        uint256 rentReset;
+        uint256 leaseEnd;
         address owner;
         address recordedOwner;
         address topBidder;
@@ -41,9 +42,14 @@ contract Fairground {
 
     modifier biddingOpen(uint256 tokenId) {
         require(
-            block.timestamp + _auctionDuration < _rentResetDate[tokenId],
+            block.timestamp + auctionDuration < _leaseEndDate[tokenId],
             "Bidding is closed"
         );
+        _;
+    }
+
+    modifier onlyAdmin() {
+        require(msg.sender == admin, "Must be the admin");
         _;
     }
 
@@ -55,6 +61,27 @@ contract Fairground {
     modifier notOwner(uint256 tokenId) {
         require(!isOwner(tokenId), "Must not be the owner");
         _;
+    }
+
+    constructor() {
+        admin = msg.sender;
+    }
+
+    function setPriceToRentRatio(uint8 ratio) external onlyAdmin {
+        priceToRentRatio = ratio;
+    }
+
+    function setLeaseDuration(uint48 duration) external onlyAdmin {
+        LeaseDuration = duration;
+    }
+
+    function setAuctionDuration(uint48 duration) external onlyAdmin {
+        LeaseDuration = duration;
+    }
+
+    function distributeFunds() external payable onlyAdmin {
+        require(communityFunds() > 0, "No community funds to distribute");
+        payable(admin).transfer(communityFunds());
     }
 
     function mint(address to) external {
@@ -70,8 +97,8 @@ contract Fairground {
         return block.timestamp > auctionEndDate(tokenId);
     }
 
-    function isRentPeriodExpired(uint256 tokenId) public view returns (bool) {
-        return block.timestamp > _rentResetDate[tokenId];
+    function isLeaseExpired(uint256 tokenId) public view returns (bool) {
+        return block.timestamp > _leaseEndDate[tokenId];
     }
 
     function activeReserve(uint256 tokenId) public view returns (uint256) {
@@ -79,7 +106,7 @@ contract Fairground {
         uint256 expiredReserve = hasNewOwner ? topBid(tokenId) : 0;
 
         return
-            isRentPeriodExpired(tokenId)
+            isLeaseExpired(tokenId)
                 ? expiredReserve
                 : _max(expiredReserve, _reservePrices[tokenId]);
     }
@@ -115,10 +142,8 @@ contract Fairground {
         return _bidDeadlines[tokenId];
     }
 
-    function rentalPeriodEndDate(
-        uint256 tokenId
-    ) public view returns (uint256) {
-        return _rentResetDate[tokenId];
+    function leaseEndDate(uint256 tokenId) public view returns (uint256) {
+        return _leaseEndDate[tokenId];
     }
 
     function targetBid(
@@ -131,10 +156,10 @@ contract Fairground {
             return 0;
         }
 
-        uint256 rentPortion = (target - previous) / _priceToRentRatio;
+        uint256 rentPortion = (target - previous) / priceToRentRatio;
         return
             isOwner(tokenId)
-                ? (target - previous - rentPortion) / _priceToRentRatio
+                ? (target - previous - rentPortion) / priceToRentRatio
                 : target - previous;
     }
 
@@ -146,7 +171,7 @@ contract Fairground {
                 id: tokenId,
                 currentBid: currentBid(tokenId),
                 auctionEnd: auctionEndDate(tokenId),
-                rentReset: rentalPeriodEndDate(tokenId),
+                leaseEnd: leaseEndDate(tokenId),
                 owner: ownerOf(tokenId),
                 recordedOwner: _owners[tokenId],
                 topBidder: topBidder(tokenId),
@@ -200,7 +225,7 @@ contract Fairground {
 
         _updateReserve(tokenId, _newReserve(tokenId));
 
-        emit LogReserve(tokenId, msg.sender, _newReserve(tokenId));
+        emit ReserveIncreased(tokenId, msg.sender, _newReserve(tokenId));
     }
 
     function placeBid(uint256 tokenId) public payable notOwner(tokenId) {
@@ -210,15 +235,15 @@ contract Fairground {
 
         _updateBid(tokenId);
 
-        emit LogBid(tokenId, msg.sender, msg.value);
+        emit BidPlaced(tokenId, msg.sender, msg.value);
     }
 
     function _launchAuction(uint256 tokenId) private {
-        _bidDeadlines[tokenId] = block.timestamp + _auctionDuration;
+        _bidDeadlines[tokenId] = block.timestamp + auctionDuration;
     }
 
-    function _launchRentPeriod(uint256 tokenId) private {
-        _rentResetDate[tokenId] = block.timestamp + _rentPeriod;
+    function _launchLease(uint256 tokenId) private {
+        _leaseEndDate[tokenId] = block.timestamp + LeaseDuration;
     }
 
     function _updateBid(uint256 tokenId) private {
@@ -241,8 +266,8 @@ contract Fairground {
     function _updateReserve(uint256 tokenId, uint256 value) private {
         _reservePrices[tokenId] = value;
         delete _topBidders[tokenId];
-        if (isRentPeriodExpired(tokenId)) {
-            _launchRentPeriod(tokenId);
+        if (isLeaseExpired(tokenId)) {
+            _launchLease(tokenId);
         }
     }
 
@@ -251,7 +276,7 @@ contract Fairground {
         _withdrawBid(tokenId, buyer, seller);
         _owners[tokenId] = buyer;
         _updateReserve(tokenId, reserve);
-        _launchRentPeriod(tokenId);
+        _launchLease(tokenId);
     }
 
     function _withdrawBid(uint256 tokenId, address from, address to) private {
@@ -273,34 +298,34 @@ contract Fairground {
         uint256 tokenId,
         uint256 amount
     ) private view returns (uint256) {
-        uint256 groundRent = amount / _priceToRentRatio;
+        uint256 groundRent = amount / priceToRentRatio;
         return amount - groundRent + _unusedRent(tokenId);
     }
 
-    function _secondsLeftInRentPeriod(
+    function _secondsLeftInLease(
         uint256 tokenId
     ) private view returns (uint256) {
         return
-            isRentPeriodExpired(tokenId)
+            isLeaseExpired(tokenId)
                 ? 0
-                : _rentResetDate[tokenId] - block.timestamp;
+                : _leaseEndDate[tokenId] - block.timestamp;
     }
 
     function _unusedRent(uint256 tokenId) private view returns (uint256) {
-        uint256 secondsLeft = _secondsLeftInRentPeriod(tokenId);
+        uint256 secondsLeft = _secondsLeftInLease(tokenId);
         return
             secondsLeft == 0 || _reservePrices[tokenId] == 0
                 ? 0
                 : _fractionMultiply(
                     secondsLeft,
-                    _rentPeriod,
-                    _reservePrices[tokenId] / _priceToRentRatio
+                    LeaseDuration,
+                    _reservePrices[tokenId] / priceToRentRatio
                 );
     }
 
-    function _rentToValue(uint256 value) private pure returns (uint256) {
-        uint256 divisor = 100 - 100 / _priceToRentRatio;
-        return (value / divisor) * 100 * _priceToRentRatio;
+    function _rentToValue(uint256 value) private view returns (uint256) {
+        uint256 divisor = 100 - 100 / priceToRentRatio;
+        return (value / divisor) * 100 * priceToRentRatio;
     }
 
     function _fractionMultiply(

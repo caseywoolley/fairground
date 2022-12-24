@@ -31,11 +31,11 @@ const hoverZoom = css`
 export const Property: React.FC<PropertyProps> = ({ property }) => {
 	const [hovered, setHovered] = useBoolean()
 	const account = useAccount()
-	const { id, currentBid, auctionEnd, rentReset, owner, recordedOwner } = property
+	const { id, currentBid, auctionEnd, leaseEnd, owner, recordedOwner, topBidder } = property
 	const isOwner = account.address === owner
 	const actionText = isOwner ? 'Set Reserve' : 'Place Bid'
 	const imgSrc = `/images/concept${(Number(id) - 1) % 14}.jpeg`
-	const expired = isExpired(auctionEnd) && isExpired(rentReset)
+	const expired = isExpired(auctionEnd) && isExpired(leaseEnd)
 
 	return (
 		<Bid owner={owner} propId={id}>
@@ -57,10 +57,11 @@ export const Property: React.FC<PropertyProps> = ({ property }) => {
 						<DisplayEth value={currentBid} />
 					</Flex>
 					{/* <Text>{owner}</Text>
-					<Text>{recordedOwner}</Text> */}
+					<Text>{recordedOwner}</Text>
+					<Text>{topBidder}</Text> */}
 					<Fade in={!hovered}>
 						<Box position='absolute'>
-							<StatusBadge isOwner={isOwner} auctionEnd={auctionEnd} rentReset={rentReset} />
+							<StatusBadge property={property} />
 						</Box>
 					</Fade>
 				</Box>

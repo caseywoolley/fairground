@@ -10,7 +10,7 @@ const bidToReserve = (val: number) => val * bidRatio * rentRatio;
 const { parseEther, formatEther } = ethers.utils;
 const setValue = (val: number) => ({ value: parseEther(String(val)) });
 const auctionDuration = 3 * 60;
-const rentPeriod = 10 * 60;
+const LeaseDuration = 10 * 60;
 const getTimestamp = (time: BigNumber) => Number(time) * 1000;
 
 const propertyDiagnosticLogging = async (fairground: Fairground) => {
@@ -20,7 +20,7 @@ const propertyDiagnosticLogging = async (fairground: Fairground) => {
         console.log('bid', formatEther(prop.currentBid));
         // console.log('min', formatEther(prop.minimumBid));
         console.log('auctionEnd', new Date(getTimestamp(prop.auctionEnd)).toISOString());
-        console.log('rentReset', new Date(getTimestamp(prop.rentReset)).toISOString());
+        console.log('leaseEnd', new Date(getTimestamp(prop.leaseEnd)).toISOString());
         console.log('owner', prop.owner);
         console.log('topBidder', prop.topBidder);
         console.log('today', new Date().toISOString());
@@ -133,7 +133,7 @@ describe('Fairground', () => {
                 await fairground.connect(addr1).placeBid(1, outbid);
                 const startingBalance = await owner.getBalance();
                 const auctionEnd = await fairground.auctionEndDate(1);
-                const rentPeriodEnd = await fairground.rentalPeriodEndDate(1);
+                const LeaseEnd = await fairground.leaseEndDate(1);
 
                 await network.provider.send('evm_setNextBlockTimestamp', [Number(auctionEnd) + 1]);
                 await network.provider.send('evm_mine');
@@ -142,8 +142,8 @@ describe('Fairground', () => {
                 const balance = await owner.getBalance();
 
                 const auctionWinnings = Number(outbid.value) * bidRatio;
-                const remainingTime = Number(rentPeriodEnd) - Number(auctionEnd) + 1;
-                const refund = (Number(parseEther(String(reserve))) * remainingTime) / rentPeriod;
+                const remainingTime = Number(LeaseEnd) - Number(auctionEnd) + 1;
+                const refund = (Number(parseEther(String(reserve))) * remainingTime) / LeaseDuration;
                 const expectedIncrease = refund + auctionWinnings;
                 const balanceIncrease = Number(balance) - Number(startingBalance);
                 const variance = Number(parseEther('0.01'));
@@ -175,12 +175,12 @@ describe('Fairground', () => {
 
                     beforeEach(async () => {
                         previousBid = await fairground.currentBid(1);
-                        const rentPeriodEnd = await fairground.rentalPeriodEndDate(1);
+                        const LeaseEnd = await fairground.leaseEndDate(1);
                         // await fairground.refresh(1);
                         // console.log('time travel -------------------------');
-                        await network.provider.send('evm_setNextBlockTimestamp', [Number(rentPeriodEnd) + 1]);
+                        await network.provider.send('evm_setNextBlockTimestamp', [Number(LeaseEnd) + 1]);
                         await network.provider.send('evm_mine');
-                        const expired = await fairground.isRentPeriodExpired(1);
+                        const expired = await fairground.isLeaseExpired(1);
                         expect(expired).to.equal(true);
                         // console.log(newEndDate);
                     });
@@ -289,7 +289,7 @@ describe('Fairground', () => {
 
                     describe('When rent period expires', async () => {
                         beforeEach(async () => {
-                            await network.provider.send('evm_increaseTime', [rentPeriod + 1]);
+                            await network.provider.send('evm_increaseTime', [LeaseDuration + 1]);
                             // await network.provider.send('evm_mine');
                             // await fairground.refresh(1);
                         });
