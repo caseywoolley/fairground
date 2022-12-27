@@ -1,4 +1,4 @@
-import { ContractName, DeployNetwork, deployContract, TokenSymbol } from '../deploy-contract';
+import { ContractName, DeployNetwork, deployContract } from '../deploy-contract';
 
 deployContract({
   name: ContractName.Fairground,

@@ -1,6 +1,6 @@
 import { ethers } from 'hardhat';
 import { Fairground } from '../../frontend/typechain';
-import { ContractName, DeployNetwork, deployContract, TokenSymbol } from '../deploy-contract';
+import { ContractName, DeployNetwork, deployContract } from '../deploy-contract';
 
 const customCode = async (contract: Fairground) => {
   const [user1] = await ethers.getSigners();

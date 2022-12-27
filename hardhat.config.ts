@@ -2,12 +2,14 @@ import '@nomicfoundation/hardhat-toolbox';
 import { HardhatUserConfig } from 'hardhat/config';
 import {config as dotenvConfig } from 'dotenv';
 
-dotenvConfig({ path: `${__dirname}/.env.local` });
+dotenvConfig({ path: `${__dirname}/frontend/.env.local` });
 
 const GOERLI_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_GOERLI_API_KEY || ''
 const MAINNET_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_MAINNET_API_KEY || ''
 const MUMBAI_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI_API_KEY || ''
-const TESTNET_SIGNER = process.env.TESTNET_SIGNER || ''
+const POLYGON_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_API_KEY || ''
+const TESTNET_WALLET = process.env.TESTNET_WALLET || ''
+const MAINNET_WALLET = process.env.MAINNET_WALLET || ''
 
 /** @type import('hardhat/config').HardhatUserConfig */
 const config: HardhatUserConfig = {
@@ -28,17 +30,22 @@ const config: HardhatUserConfig = {
     },
     goerli: {
       url: `https://eth-goerli.g.alchemy.com/v2/${GOERLI_API_KEY}`,
-      accounts: [TESTNET_SIGNER]
+      accounts: [TESTNET_WALLET]
     },
     mainnet: {
       chainId: 1,
       url: `https://eth-mainnet.g.alchemy.com/v2/${MAINNET_API_KEY}`,
-      accounts: [TESTNET_SIGNER]
+      accounts: [MAINNET_WALLET]
     },
     mumbai: {
       chainId: 80001,
       url: `https://polygon-mumbai.g.alchemy.com/v2/${MUMBAI_API_KEY}`,
-      accounts: [TESTNET_SIGNER]
+      accounts: [TESTNET_WALLET]
+    },
+    polygon: {
+      chainId: 137,
+      url: `https://polygon-mainnet.g.alchemy.com/v2/${POLYGON_API_KEY}`,
+      accounts: [MAINNET_WALLET]
     }
   },
   typechain: {

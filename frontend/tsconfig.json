@@ -16,9 +16,6 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@artifacts*": ["artifacts/*"],
-      "@public*": ["public/*"],
-      "@typechains*": ["typechain/*"],
       "@*": [ "src/*" ]
     },
   },

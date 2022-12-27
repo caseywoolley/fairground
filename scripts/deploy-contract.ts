@@ -42,11 +42,16 @@ const testRunContract = {
 
 export async function deployContract(options: DeployContractOptions) {
   async function main() {
-    const {name, network, budget = 0.00001, customCode, testRun} = options;
+    const {name, network, budget, customCode, testRun} = options;
     const symbol = networkSymbol[network];
 
+    if (testRun) {
+      console.log('---- TEST RUN ----')
+    }
+
     const contractFactory = await ethers.getContractFactory(name);
-    await deploymentBudgetCheck(contractFactory, budget, symbol);
+
+    await deploymentBudgetCheck(contractFactory, budget, symbol, testRun);
 
     const Contract = testRun ? testRunContract : await contractFactory.deploy();
 
@@ -57,6 +62,7 @@ export async function deployContract(options: DeployContractOptions) {
         await customCode(Contract)
       }
     }
+
     console.log(`${name} deployed to: ${Contract.address}`);
 
     frontendAddressUpdate(network, Contract.address, testRun);

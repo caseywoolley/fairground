@@ -6,8 +6,8 @@ import { useCommunityFunds, usePropertyList, usePageRefresh, useStore, useTotalS
 import { Mint } from '@components/contract'
 import { Property } from '@components'
 import { MdRefresh } from 'react-icons/md'
-import { Fairground } from '@typechainscontracts'
 import { useAccount } from 'wagmi'
+import { Fairground } from 'typechain/Fairground'
 
 const Home: React.FC = () => {
 	const isHydrated = useIsHydrated()

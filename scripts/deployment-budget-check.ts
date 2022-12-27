@@ -2,7 +2,7 @@ import { ContractFactory } from 'ethers';
 import { ethers } from 'hardhat';
 import { TokenSymbol } from './deploy-contract';
 
-export async function deploymentBudgetCheck(contract: ContractFactory, budget: number, symbol = TokenSymbol.ETH) {
+export async function deploymentBudgetCheck(contract: ContractFactory, budget: number, symbol = TokenSymbol.ETH, testRun?: boolean) {
   const gasPrice = await contract.signer.getGasPrice();
   const deploymentTransaction = contract.getDeployTransaction();
   const estimatedGas = await contract.signer.estimateGas(deploymentTransaction);
@@ -20,11 +20,21 @@ export async function deploymentBudgetCheck(contract: ContractFactory, budget: n
   console.log(`Deploy budget: ${budget} ${symbol}`);
 
   if (exceedsFunds > 0) {
-    throw new Error(`${exceedsFunds} ${symbol} over wallet balance`);
+    const message = `${exceedsFunds} ${symbol} over wallet balance`;
+    if (testRun) {
+      console.log(message)
+    } else {
+      throw new Error(message);
+    }
   }
 
   if (overBudget > 0) {
-    throw new Error(`${overBudget} ${symbol} over budget`);
+    const message = `${overBudget} ${symbol} over budget`;
+    if (testRun) {
+      console.log(message)
+    } else {
+      throw new Error(message);
+    }
   }
 
   console.log(`${ethers.utils.formatEther(String(Math.abs(overBudget)))} ${symbol} under budget`);
