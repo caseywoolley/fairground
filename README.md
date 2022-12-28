@@ -1,4 +1,4 @@
-#Fairground
+# Fairground
 
 An open-source blockchain land protocol and auction platform for citizen owned cities
 
@@ -18,7 +18,7 @@ Protocol Inspiration and reference:
 - [Thoughts on Perpetual Property Rights](https://bytemaster.medium.com/thoughts-on-perpetual-property-rights-b8c7f5bf4221) by Daniel Larimer
 - [Should there be demand-based recurring fees on ENS domains?](https://vitalik.ca/general/2022/09/09/ens.html) by Vitalik Buteren
 
->*"Earth provides enough to satisfy every man's need, but not every man’s greed." — Gandhi*
+>*"Cities have the capability of providing something for everybody, only because, and only when, they are created by everybody" — Jane Jacobs*
 
 ## Getting Started
 
