@@ -1,18 +1,18 @@
 # Fairground
 
-An open-source blockchain land protocol and auction platform for citizen owned cities
+An open-source blockchain land protocol and auction platform featuring demand-based ground rent for building better, more sustainable, and more inclusive cities, designed from the bottom-up by the community.
 
 - [Whitepaper](https://drive.google.com/file/d/1_636cLWhI-LZw_KYkIm6hjNDM8dZSsMn/view)
 - [Newsletter](https://www.joinfairground.com/)
 - [Live Prototype](https://fairground.vercel.app/)
 
-Protocol objectives:
-- Decentrailzed and autonomous market-based city planning
-- On-chain land registry and title transfer
-- Market demand generated citizens dividend
-- Fully citizen owned and market managed cities
+Protocol Features and Objectives:
+- Demand-based ground rent collection and citizens dividend distribution
+- On-chain land registry and title transfer governed by auction smart contracts
+- Decentralized and market-driven zoning, planning, and infrastructure
+- Protocol level changes by unanimous stakeholder consent through agreement, buyout, or amicable division
 
-Protocol Inspiration and reference:
+Protocol Inspiration and Reference:
 - [Progress and Poverty](https://cdn.mises.org/Progress%20and%20Poverty_3.pdf) by Henry George
 - [Chapter 1 of Radical Markets](https://assets.press.princeton.edu/chapters/s11222.pdf) by Glen Weyl
 - [Thoughts on Perpetual Property Rights](https://bytemaster.medium.com/thoughts-on-perpetual-property-rights-b8c7f5bf4221) by Daniel Larimer
