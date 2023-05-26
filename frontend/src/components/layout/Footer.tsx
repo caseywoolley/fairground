@@ -21,7 +21,7 @@ export const Footer: React.FC = () => (
 			<Spacer></Spacer>
 			<LocalFaucetButton />
 			<Text as='span' p='2' fontSize={12}>
-				Fairground 2022
+				Fairground {new Date().getFullYear()}
 			</Text>
 		</Flex>
 	</footer>

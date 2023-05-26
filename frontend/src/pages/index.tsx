@@ -42,11 +42,6 @@ const Home: React.FC = () => {
 		}, 400)
 	}, [pageRefresh, setRefreshing])
 
-	// useEffect(() => {
-	//     const intervalId = setInterval(pageRefresh, 60 * 1000);
-	//     return () => clearInterval(intervalId);
-	// }, [pageRefresh]);
-
 	if (!isHydrated) {
 		return null
 	}

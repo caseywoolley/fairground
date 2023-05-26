@@ -4,6 +4,7 @@ import {config as dotenvConfig } from 'dotenv';
 
 dotenvConfig({ path: `${__dirname}/frontend/.env.local` });
 
+const SEPOLIA_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_SEPOLIA_API_KEY || ''
 const GOERLI_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_GOERLI_API_KEY || ''
 const MAINNET_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_MAINNET_API_KEY || ''
 const MUMBAI_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI_API_KEY || ''
@@ -27,6 +28,10 @@ const config: HardhatUserConfig = {
         auto: true,
         interval: 1000
       }
+    },
+    sepolia: {
+      url: `https://eth-sepolia.g.alchemy.com/v2/${SEPOLIA_API_KEY}`,
+      accounts: [TESTNET_WALLET]
     },
     goerli: {
       url: `https://eth-goerli.g.alchemy.com/v2/${GOERLI_API_KEY}`,

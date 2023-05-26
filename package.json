@@ -9,6 +9,7 @@
     "mainnet": "npx hardhat run scripts/deploy/mainnet.ts --network mainnet",
     "mumbai": "npx hardhat run scripts/deploy/mumbai.ts --network mumbai",
     "goerli": "npx hardhat run scripts/deploy/goerli.ts --network goerli",
+    "sepolia": "npx hardhat run scripts/deploy/sepolia.ts --network sepolia",
     "polygon": "npx hardhat run scripts/deploy/polygon.ts --network polygon",
     "dev": "cd frontend && yarn dev && cd..",
     "devploy": "yarn localhost && yarn dev",

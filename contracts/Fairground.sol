@@ -11,7 +11,7 @@ contract Fairground {
 
     address public admin;
     uint8 public priceToRentRatio = 20;
-    uint48 public LeaseDuration = 10 minutes;
+    uint48 public leaseDuration = 10 minutes;
     uint48 public auctionDuration = 3 minutes;
 
     uint256 private _totalBidValue = 0;
@@ -27,6 +27,7 @@ contract Fairground {
         address indexed _from,
         uint256 _value
     );
+
     event BidPlaced(uint256 indexed _id, address indexed _from, uint256 _value);
 
     struct PropertyDetails {
@@ -72,11 +73,11 @@ contract Fairground {
     }
 
     function setLeaseDuration(uint48 duration) external onlyAdmin {
-        LeaseDuration = duration;
+        leaseDuration = duration;
     }
 
     function setAuctionDuration(uint48 duration) external onlyAdmin {
-        LeaseDuration = duration;
+        auctionDuration = duration;
     }
 
     function distributeFunds() external payable onlyAdmin {
@@ -243,7 +244,7 @@ contract Fairground {
     }
 
     function _launchLease(uint256 tokenId) private {
-        _leaseEndDate[tokenId] = block.timestamp + LeaseDuration;
+        _leaseEndDate[tokenId] = block.timestamp + leaseDuration;
     }
 
     function _updateBid(uint256 tokenId) private {
@@ -318,7 +319,7 @@ contract Fairground {
                 ? 0
                 : _fractionMultiply(
                     secondsLeft,
-                    LeaseDuration,
+                    leaseDuration,
                     _reservePrices[tokenId] / priceToRentRatio
                 );
     }

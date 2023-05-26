@@ -31,7 +31,7 @@ const hoverZoom = css`
 export const Property: React.FC<PropertyProps> = ({ property }) => {
 	const [hovered, setHovered] = useBoolean()
 	const account = useAccount()
-	const { id, currentBid, auctionEnd, leaseEnd, owner, recordedOwner, topBidder } = property
+	const { id, currentBid, auctionEnd, leaseEnd, owner, recordedOwner } = property
 	const isOwner = account.address === owner
 	const actionText = isOwner ? 'Set Reserve' : 'Place Bid'
 	const imgSrc = `/images/concept${(Number(id) - 1) % 14}.jpeg`
@@ -56,9 +56,6 @@ export const Property: React.FC<PropertyProps> = ({ property }) => {
 						</Stack>
 						<DisplayEth value={currentBid} />
 					</Flex>
-					{/* <Text>{owner}</Text>
-					<Text>{recordedOwner}</Text>
-					<Text>{topBidder}</Text> */}
 					<Fade in={!hovered}>
 						<Box position='absolute'>
 							<StatusBadge property={property} />

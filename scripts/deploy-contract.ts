@@ -11,6 +11,7 @@ export enum DeployNetwork {
   Goerli = 'goerli',
   Mumbai = 'mumbai',
   Polygon = 'polygon',
+  Sepolia = 'sepolia',
 }
 
 export enum TokenSymbol {
@@ -18,6 +19,7 @@ export enum TokenSymbol {
   MATIC = 'MATIC',
   MUMATIC = 'muMATIC',
   GOETH = 'goETH',
+  SETH = 'SETH',
 }
 
 export const networkSymbol = {
@@ -25,6 +27,7 @@ export const networkSymbol = {
   [DeployNetwork.Goerli]: TokenSymbol.GOETH,
   [DeployNetwork.Mumbai]: TokenSymbol.MUMATIC,
   [DeployNetwork.Polygon]: TokenSymbol.MATIC,
+  [DeployNetwork.Sepolia]: TokenSymbol.SETH,
 }
 
 export type DeployContractOptions = {

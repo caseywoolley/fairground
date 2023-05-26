@@ -63,7 +63,6 @@ export declare namespace Fairground {
 
 export interface FairgroundInterface extends utils.Interface {
   functions: {
-    "LeaseDuration()": FunctionFragment;
     "activeBid(uint256)": FunctionFragment;
     "activeReserve(uint256)": FunctionFragment;
     "admin()": FunctionFragment;
@@ -76,6 +75,7 @@ export interface FairgroundInterface extends utils.Interface {
     "isAuctionExpired(uint256)": FunctionFragment;
     "isLeaseExpired(uint256)": FunctionFragment;
     "isOwner(uint256)": FunctionFragment;
+    "leaseDuration()": FunctionFragment;
     "leaseEndDate(uint256)": FunctionFragment;
     "mint(address)": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
@@ -95,7 +95,6 @@ export interface FairgroundInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "LeaseDuration"
       | "activeBid"
       | "activeReserve"
       | "admin"
@@ -108,6 +107,7 @@ export interface FairgroundInterface extends utils.Interface {
       | "isAuctionExpired"
       | "isLeaseExpired"
       | "isOwner"
+      | "leaseDuration"
       | "leaseEndDate"
       | "mint"
       | "ownerOf"
@@ -125,10 +125,6 @@ export interface FairgroundInterface extends utils.Interface {
       | "updateClaim"
   ): FunctionFragment;
 
-  encodeFunctionData(
-    functionFragment: "LeaseDuration",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "activeBid",
     values: [PromiseOrValue<BigNumberish>]
@@ -173,6 +169,10 @@ export interface FairgroundInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "isOwner",
     values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "leaseDuration",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "leaseEndDate",
@@ -235,10 +235,6 @@ export interface FairgroundInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
 
-  decodeFunctionResult(
-    functionFragment: "LeaseDuration",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "activeBid", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "activeReserve",
@@ -275,6 +271,10 @@ export interface FairgroundInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "isOwner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "leaseDuration",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "leaseEndDate",
     data: BytesLike
@@ -379,8 +379,6 @@ export interface Fairground extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    LeaseDuration(overrides?: CallOverrides): Promise<[number]>;
-
     activeBid(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -430,6 +428,8 @@ export interface Fairground extends BaseContract {
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    leaseDuration(overrides?: CallOverrides): Promise<[number]>;
 
     leaseEndDate(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -503,8 +503,6 @@ export interface Fairground extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  LeaseDuration(overrides?: CallOverrides): Promise<number>;
-
   activeBid(
     tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -554,6 +552,8 @@ export interface Fairground extends BaseContract {
     tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  leaseDuration(overrides?: CallOverrides): Promise<number>;
 
   leaseEndDate(
     tokenId: PromiseOrValue<BigNumberish>,
@@ -627,8 +627,6 @@ export interface Fairground extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    LeaseDuration(overrides?: CallOverrides): Promise<number>;
-
     activeBid(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -676,6 +674,8 @@ export interface Fairground extends BaseContract {
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    leaseDuration(overrides?: CallOverrides): Promise<number>;
 
     leaseEndDate(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -771,8 +771,6 @@ export interface Fairground extends BaseContract {
   };
 
   estimateGas: {
-    LeaseDuration(overrides?: CallOverrides): Promise<BigNumber>;
-
     activeBid(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -822,6 +820,8 @@ export interface Fairground extends BaseContract {
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    leaseDuration(overrides?: CallOverrides): Promise<BigNumber>;
 
     leaseEndDate(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -896,8 +896,6 @@ export interface Fairground extends BaseContract {
   };
 
   populateTransaction: {
-    LeaseDuration(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     activeBid(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -947,6 +945,8 @@ export interface Fairground extends BaseContract {
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    leaseDuration(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     leaseEndDate(
       tokenId: PromiseOrValue<BigNumberish>,
