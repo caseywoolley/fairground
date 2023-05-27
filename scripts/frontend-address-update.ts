@@ -29,7 +29,7 @@ export function frontendAddressUpdate(network: string, address: string, testRun?
 
   if (!testRun && network !== DeployNetwork.Localhost) {
     const timestamp = new Date().toISOString();
-    const logEntry = `${timestamp}, ${network}, ${address}, ${packageJson.version}`;
+    const logEntry = `${timestamp}, ${network}, ${address}, ${packageJson.version}\n`;
     fs.appendFileSync(logFile, logEntry);
 
     console.log(`Logged: ${timestamp} - ${network} - ${address} - ${packageJson.version}`)

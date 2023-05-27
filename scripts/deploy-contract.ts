@@ -2,6 +2,8 @@ import { ethers } from 'hardhat';
 import { deploymentBudgetCheck } from './deployment-budget-check';
 import { frontendAddressUpdate } from './frontend-address-update';
 
+const TESTRUN = process.env.TESTRUN === 'true'
+
 export enum ContractName {
   Fairground = 'Fairground',
 }
@@ -45,7 +47,8 @@ const testRunContract = {
 
 export async function deployContract(options: DeployContractOptions) {
   async function main() {
-    const {name, network, budget, customCode, testRun} = options;
+    const {name, network, budget, customCode, testRun: hardcodedTestRun } = options;
+    const testRun = TESTRUN || hardcodedTestRun;
     const symbol = networkSymbol[network];
 
     if (testRun) {

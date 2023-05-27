@@ -14,5 +14,6 @@ deployContract({
   name: ContractName.Fairground,
   network: DeployNetwork.Localhost,
   budget: 1,
-  customCode
+  customCode,
+  testRun: false
 });

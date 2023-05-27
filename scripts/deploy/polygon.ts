@@ -4,5 +4,5 @@ deployContract({
   name: ContractName.Fairground,
   network: DeployNetwork.Polygon,
   budget: 0.000005,
-  testRun: true
+  testRun: false
 });

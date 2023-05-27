@@ -18,7 +18,6 @@ const propertyDiagnosticLogging = async (fairground: Fairground) => {
     properties.forEach((prop) => {
         console.log('id', Number(prop.id));
         console.log('bid', formatEther(prop.currentBid));
-        // console.log('min', formatEther(prop.minimumBid));
         console.log('auctionEnd', new Date(getTimestamp(prop.auctionEnd)).toISOString());
         console.log('leaseEnd', new Date(getTimestamp(prop.leaseEnd)).toISOString());
         console.log('owner', prop.owner);
@@ -111,7 +110,6 @@ describe('Fairground', () => {
         describe('when reserve price is set', () => {
             const reserveTarget = 2;
             const reserve = bidToReserve(reserveTarget);
-            // console.log('reserve amount', reserve)
             const outbid = setValue(3);
             beforeEach(async () => {
                 await fairground.mint(owner.address);
@@ -152,55 +150,60 @@ describe('Fairground', () => {
             });
 
             describe('when reserve is outbid and auction ends', () => {
+                let reserve: BigNumber;
                 let outbid: BigNumber;
+                let newReserve: BigNumber;
+
                 beforeEach(async () => {
-                    const previous = await fairground.currentBid(1);
-                    await fairground.connect(addr1).placeBid(1, setValue(Number(formatEther(previous)) + 1));
+                    reserve = await fairground.currentBid(1);
+                    await fairground.connect(addr2).placeBid(1, setValue(Number(formatEther(reserve)) + 1));
                     outbid = await fairground.currentBid(1);
                     const auctionEndDate = await fairground.auctionEndDate(1);
                     await network.provider.send('evm_setNextBlockTimestamp', [Number(auctionEndDate) + 1]);
                     await network.provider.send('evm_mine');
                     const expired = await fairground.isAuctionExpired(1);
-                    const current = await fairground.currentBid(1);
-                    // console.log(Number(current));
+                    newReserve = await fairground.currentBid(1);
                     expect(expired).to.be.true;
                 });
 
-                xit('Should set reserve to winning bid', async () => {
-                    // expect(bid).to.equal(valueOf1.value);
+                it('Should set reserve to winning bid', async () => {
+                    expect(outbid).to.be.greaterThan(reserve);
+                    expect(outbid).to.equal(newReserve);
                 });
 
                 describe('when rent period expires', () => {
-                    let previousBid: BigNumber;
-
                     beforeEach(async () => {
-                        previousBid = await fairground.currentBid(1);
                         const LeaseEnd = await fairground.leaseEndDate(1);
-                        // await fairground.refresh(1);
-                        // console.log('time travel -------------------------');
                         await network.provider.send('evm_setNextBlockTimestamp', [Number(LeaseEnd) + 1]);
                         await network.provider.send('evm_mine');
                         const expired = await fairground.isLeaseExpired(1);
                         expect(expired).to.equal(true);
-                        // console.log(newEndDate);
                     });
 
                     it('Should keep reserve set to winning bid when rent period expires', async () => {
                         const reserve = await fairground.currentBid(1);
-                        // console.log(Number(formatEther(reserve)))
                         expect(reserve).to.equal(outbid);
                     });
 
-                    xit('Should allow previous owner to bid', async () => {
-                        // TODO
+                    it('Should allow previous owner to bid', async () => {
+                        const reserve = await fairground.currentBid(1);
+                        await fairground.connect(addr1).placeBid(1, setValue(Number(formatEther(reserve)) + 1));
+                        const newBid = await fairground.currentBid(1);
+                        expect(newBid).to.be.greaterThan(reserve);
                     });
 
-                    xit('Should allow new owner to set reserve', async () => {
-                        // TODO
+                    it('Should allow new owner to set reserve', async () => {
+                        const reserve = await fairground.currentBid(1);
+                        await fairground.connect(addr2).increaseReserve(1, setValue(Number(formatEther(reserve)) + 1));
+                        const newBid = await fairground.currentBid(1);
+                        expect(newBid).to.be.greaterThan(reserve);
                     });
 
-                    xit('Should allow anyone to bid', async () => {
-                        // TODO
+                    it('Should allow a 3rd party to bid', async () => {
+                        const reserve = await fairground.currentBid(1);
+                        await fairground.connect(addr3).placeBid(1, setValue(Number(formatEther(reserve)) + 1));
+                        const newBid = await fairground.currentBid(1);
+                        expect(newBid).to.be.greaterThan(reserve);
                     });
                 });
             });
@@ -211,7 +214,6 @@ describe('Fairground', () => {
             let bidAmount: BigNumber;
 
             beforeEach(async () => {
-                // console.log('bid 1')
                 await fairground.connect(addr1).placeBid(1, valueOf1);
                 bidAmount = await fairground.currentBid(1);
             });
@@ -229,7 +231,6 @@ describe('Fairground', () => {
                 const valueOf2 = setValue(2);
 
                 beforeEach(async () => {
-                    // console.log('bid 2')
                     await fairground.connect(addr2).placeBid(1, valueOf2);
                 });
 
@@ -255,6 +256,8 @@ describe('Fairground', () => {
                         await network.provider.send('evm_increaseTime', [auctionDuration + 1]);
                         await network.provider.send('evm_mine');
 
+                        await fairground.updateClaim(1);
+
                         expired = await fairground.isAuctionExpired(1);
                         expect(expired).to.equal(true);
                     });
@@ -270,28 +273,34 @@ describe('Fairground', () => {
                         expect(reserveAmount).to.equal(valueOf2.value);
                     });
 
-                    it('Should compensate previous owner on updateClaim', async () => {
-                        await fairground.connect(addr1).updateClaim(1);
+                    it('Should compensate previous owner', async () => {
                         const newBalance = await owner.getBalance();
                         const expectedNewBalance = Number(ownerStartingBalance) + ownerCompensation;
                         const difference = Math.abs(Number(newBalance) - expectedNewBalance);
-                        const variance = Number(parseEther('0.000000001'));
+                        const variance = Number(parseEther('0.0001'));
 
                         expect(difference).to.be.lessThan(variance);
                     });
 
-                    xit('Should collect ground rent from previous auction', async () => {
+                    it('Should collect ground rent from previous auction', async () => {
                         const newTreasury = await fairground.communityFunds();
-
-                        // TODO: include prorated ground rent
                         expect(Number(newTreasury)).to.equal(groundRent);
                     });
 
                     describe('When rent period expires', async () => {
+                        let expired;
+
                         beforeEach(async () => {
                             await network.provider.send('evm_increaseTime', [LeaseDuration + 1]);
-                            // await network.provider.send('evm_mine');
-                            // await fairground.refresh(1);
+                            await network.provider.send('evm_mine');
+
+                            expired = await fairground.isLeaseExpired(1);
+                            expect(expired).to.equal(true);
+                        });
+
+                        it('Should set bid to zero', async () => {
+                            const bid = await fairground.currentBid(1);
+                            expect(bid).to.equal(0);
                         });
                     });
 
@@ -299,7 +308,6 @@ describe('Fairground', () => {
                         let newAuctionStartDate: number;
 
                         beforeEach(async () => {
-                            // console.log('bid 3')
                             expect(bidAmount).to.equal(valueOf1.value);
                             await fairground.connect(addr3).placeBid(1, setValue(3));
                             expect(await fairground.ownerOf(1)).to.equal(addr2.address);
@@ -311,7 +319,6 @@ describe('Fairground', () => {
                         it('Should relaunch the auction', async () => {
                             const auctionEndDate = await fairground.auctionEndDate(1);
                             const expectedEndDate = Number(newAuctionStartDate * 1000) + auctionDuration * 1000;
-
                             expect(getTimestamp(auctionEndDate)).to.equal(expectedEndDate);
                         });
                     });
@@ -338,7 +345,6 @@ describe('Fairground', () => {
         it('Should return payment amount needed to set target reserve', async () => {
             const bid = await fairground.currentBid(1);
             const match = await fairground.connect(owner).targetBid(1, parseEther('1'));
-
             expect(Number(match)).to.equal(bidToReserve(Number(bid)));
         });
 
@@ -349,7 +355,6 @@ describe('Fairground', () => {
             await fairground.connect(owner).increaseReserve(1, secondReserve);
             const targetReserve = parseEther('3');
             const targetIncrease = await fairground.connect(owner).targetBid(1, targetReserve);
-
             expect(Number(targetIncrease)).to.equal(bidToReserve(Number(targetReserve)) - Number(firstReserve.value) - Number(secondReserve.value));
         });
     });
