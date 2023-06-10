@@ -18,5 +18,5 @@ export const useImageSrc = (id: number) => {
 		}
 	}, [address])
 
-	return `/images/concept${imageNumber}.jpg`
+	return `/images/concept/concept${imageNumber}.jpeg`
 }
