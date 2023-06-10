@@ -6,6 +6,7 @@ import { chain, configureChains, createClient, WagmiConfig } from 'wagmi'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
+import React from 'react'
 
 const SEPOLIA_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_SEPOLIA_API_KEY || ''
 const GOERLI_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_GOERLI_API_KEY || ''
@@ -49,9 +50,11 @@ export default function App({ Component, pageProps }: AppProps) {
 					borderRadius: 'small',
 					accentColor: '#dd6b20',
 				})}>
-				<ChakraProvider>
-					<Component {...pageProps} />
-				</ChakraProvider>
+				<React.StrictMode>
+					<ChakraProvider>
+						<Component {...pageProps} />
+					</ChakraProvider>
+				</React.StrictMode>
 			</RainbowKitProvider>
 		</WagmiConfig>
 	)
