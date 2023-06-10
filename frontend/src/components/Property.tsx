@@ -10,6 +10,7 @@ import { PropertyId } from './PropertyId'
 import { Claim } from '@components/contract/Claim'
 import { useAccount } from 'wagmi'
 import { isExpired } from '@utils'
+import { useImageSrc } from '@hooks'
 
 export type FairgroundProperty = Awaited<ReturnType<Fairground['propertyList']>>[0]
 
@@ -34,7 +35,8 @@ export const Property: React.FC<PropertyProps> = ({ property }) => {
 	const { id, currentBid, auctionEnd, leaseEnd, owner, recordedOwner } = property
 	const isOwner = account.address === owner
 	const actionText = isOwner ? 'Set Reserve' : 'Place Bid'
-	const imgSrc = `/images/concept${(Number(id) - 1) % 14}.jpeg`
+	// const imgSrc = `/images/concept${(Number(id) - 1) % 65}.jpg`
+	const imgSrc = useImageSrc(Number(id))
 	const expired = isExpired(auctionEnd) && isExpired(leaseEnd)
 
 	return (

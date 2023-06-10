@@ -10,7 +10,7 @@ const blocktimeOffset = 15000
 
 const getDateText = (data: CountdownRenderProps, timestamp: number, isAuction: boolean, isOwner?: boolean) => {
 	const { days, hours, minutes, seconds, completed } = data
-	const endText = isAuction ? 'Auction ends' : 'Lease renews'
+	const endText = isAuction ? 'Auction ends' : 'Lease expires'
 	const transactionText = isOwner ? 'Purchased' : 'Sold'
 	const completedText = isAuction ? transactionText : 'Lease expired'
 	const prefix = completed ? completedText : days > 30 ? endText : `${endText} in`

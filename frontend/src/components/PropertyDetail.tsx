@@ -5,7 +5,7 @@ import { HiBadgeCheck } from 'react-icons/hi'
 import { PropertyId } from './PropertyId'
 import { Claim } from '@components/contract/Claim'
 import { BigNumber } from 'ethers'
-import { useOnMount, usePropertyDetail } from '@hooks'
+import { useImageSrc, useOnMount, usePropertyDetail } from '@hooks'
 import { useAccount } from 'wagmi'
 import { isExpired } from '@utils'
 
@@ -21,14 +21,14 @@ export const PropertyDetail: React.FC<PropertyDetailProps> = ({ propId }) => {
 		property.refresh()
 	})
 
+	const { id, currentBid, auctionEnd, leaseEnd, owner, recordedOwner } = property.details ?? {}
+	const imgSrc = useImageSrc(Number(id))
+	const isOwner = account.address === owner
+	const expired = isExpired(auctionEnd ?? 0) && isExpired(leaseEnd ?? 0)
+
 	if (!property?.details) {
 		return <Skeleton height={464} />
 	}
-
-	const { id, currentBid, auctionEnd, leaseEnd, owner, recordedOwner } = property.details ?? {}
-	const isOwner = account.address === owner
-	const imgSrc = `/images/concept${(Number(id) - 1) % 14}.jpeg`
-	const expired = isExpired(auctionEnd) && isExpired(leaseEnd)
 
 	return (
 		<Box>
@@ -38,13 +38,18 @@ export const PropertyDetail: React.FC<PropertyDetailProps> = ({ propId }) => {
 			<Box m={2}>
 				<Flex justifyContent='space-between' alignItems='center'>
 					<Stack direction='row' alignItems='center'>
-						<PropertyId number={id} />
+						<PropertyId number={id ?? 0} />
 						{isOwner && (
 							<Tooltip hasArrow label='You own this' shouldWrapChildren placement='top'>
 								<Icon as={HiBadgeCheck} color='orange.400' />
 							</Tooltip>
 						)}
-						<Claim owner={owner} recordedOwner={recordedOwner} propId={id} currentBid={currentBid} isExpired={expired}></Claim>
+						<Claim
+							owner={owner as string}
+							recordedOwner={recordedOwner as string}
+							propId={id as BigNumber}
+							currentBid={currentBid as BigNumber}
+							isExpired={expired}></Claim>
 					</Stack>
 					<DisplayEth value={currentBid} />
 				</Flex>
