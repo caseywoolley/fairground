@@ -1,13 +1,12 @@
 import { Divider, Flex, Icon, IconButton, SimpleGrid, Text, useBoolean } from '@chakra-ui/react'
 import React, { useCallback, useEffect } from 'react'
 import { Layout } from '@components/layout'
-import { DisplayEth, Pagination } from '@components'
+import { DisplayEth, Pagination, PropertyDemo } from '@components'
 import { useCommunityFunds, usePropertyList, usePageRefresh, useStore, useTotalSupply, useIsHydrated, useOnUnmount } from '@hooks'
 import { Mint } from '@components/contract'
 import { Property } from '@components'
 import { MdRefresh } from 'react-icons/md'
 import { useAccount } from 'wagmi'
-import { Fairground } from 'typechain/Fairground'
 
 const Home: React.FC = () => {
 	const isHydrated = useIsHydrated()
@@ -19,6 +18,8 @@ const Home: React.FC = () => {
 	const properties = usePropertyList()
 	const totalSupply = useTotalSupply()
 	const { pagination } = useStore((store) => store)
+
+	const demoProperties = [...Array(10).keys()].map((id) => ({ id: id + 1 }))
 
 	useOnUnmount(() => setActive.off)
 
@@ -54,26 +55,29 @@ const Home: React.FC = () => {
 	return (
 		<Layout>
 			<Divider pt={8}></Divider>
-			<Flex justifyContent='space-between' width='100%' mt='8' mb='4'>
-				<Flex gridGap={2} alignItems='center'>
-					<Mint />
-					<IconButton isLoading={refreshing} onClick={handleRefresh} aria-label='refresh' icon={<Icon as={MdRefresh} w={6} h={6} />} />
-					{Boolean(totalSupply.count) && (
-						<Text pl={5} color='gray.500'>
-							{propertyRange}
-						</Text>
-					)}
-				</Flex>
-				<Flex gridGap={2} alignItems='center'>
-					<Text fontSize='lg'>Community Funds</Text>
-					<DisplayEth value={community.funds} />
-				</Flex>
-				<Pagination max={pageMax} />
-			</Flex>
+			{isConnected && (
+				<>
+					<Flex justifyContent='space-between' width='100%' mt='8' mb='4'>
+						<Flex gridGap={2} alignItems='center'>
+							<Mint />
+							<IconButton isLoading={refreshing} onClick={handleRefresh} aria-label='refresh' icon={<Icon as={MdRefresh} w={6} h={6} />} />
+							{Boolean(totalSupply.count) && (
+								<Text pl={5} color='gray.500'>
+									{propertyRange}
+								</Text>
+							)}
+						</Flex>
+						<Flex gridGap={2} alignItems='center'>
+							{Boolean(community.funds) && <Text fontSize='lg'>Community Funds</Text>}
+							<DisplayEth value={community.funds} />
+						</Flex>
+						<Pagination max={pageMax} />
+					</Flex>
+				</>
+			)}
 			<SimpleGrid mt={2} gridGap={2} templateColumns='repeat(auto-fill, minmax(300px, 1fr))'>
-				{properties.list.map((property: Fairground.PropertyDetailsStructOutput) => (
-					<Property key={Number(property.id)} property={property} />
-				))}
+				{isConnected && properties.list.map((property) => <Property key={Number(property.id)} property={property} />)}
+				{!isConnected && demoProperties.map((property) => <PropertyDemo key={Number(property.id)} property={property} />)}
 			</SimpleGrid>
 		</Layout>
 	)

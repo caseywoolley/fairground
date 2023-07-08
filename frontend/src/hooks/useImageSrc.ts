@@ -1,22 +1,25 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useContractAddress } from './useContractAddress'
 import { randomizeArray } from '@utils'
 
-const length = 64
-let randomNumbers: number[] = []
+const IMAGE_COUNT = 64
+const ref = {
+	randomNumbers: [] as number[],
+}
 
 export const useImageSrc = (id: number) => {
+	const [imageNumber, setImageNumber] = useState<number>()
 	const address = useContractAddress()
-	const index = (id - 1) % (length + 1)
-	const imageNumber = randomNumbers?.[index]
+	const index = (id - 1) % (IMAGE_COUNT + 1)
 
 	useEffect(() => {
-		if (!randomNumbers.length) {
+		if (address && !ref.randomNumbers?.length) {
 			const seed = parseInt(address, 16)
-			const numbers = Array.from({ length }, (_, i) => i)
-			randomNumbers = randomizeArray(seed, numbers)
+			const numbers = Array.from({ length: IMAGE_COUNT }, (_, i) => i)
+			ref.randomNumbers = randomizeArray(seed, numbers)
 		}
-	}, [address])
+		setImageNumber(ref.randomNumbers[index])
+	}, [address, imageNumber, index])
 
-	return `/images/concept/concept${imageNumber}.jpeg`
+	return imageNumber ? `/images/concept/concept${imageNumber}.jpeg` : '/images/1024x1024.png'
 }

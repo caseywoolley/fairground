@@ -1,4 +1,4 @@
-import { Button, IconButton, HStack, Icon, Text, Spinner } from '@chakra-ui/react'
+import { Button, IconButton, HStack, Icon, Text, Spinner, Box } from '@chakra-ui/react'
 import { usePropertyList, useStore, useTotalSupply } from '@hooks'
 import React, { useCallback } from 'react'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
@@ -65,7 +65,7 @@ export const Pagination: React.FC<PaginationProps> = ({ max }) => {
 
 	return (
 		<HStack>
-			{properties.loading && <Spinner pr={2} />}
+			<Spinner visibility={properties.loading ? 'visible' : 'hidden'} pr={2} />
 			<IconButton onClick={pageDown} disabled={page - 1 < 1} aria-label='back' icon={<Icon as={IoIosArrowBack}></Icon>} />
 			{buttonRange[0] > 1 && pageButton(1, 'min')}
 			{buttonRange[0] > 2 && (

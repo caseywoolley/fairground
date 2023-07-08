@@ -30,6 +30,7 @@ const config: HardhatUserConfig = {
       }
     },
     sepolia: {
+      chainId: 11155111,
       url: `https://eth-sepolia.g.alchemy.com/v2/${SEPOLIA_API_KEY}`,
       accounts: [TESTNET_WALLET]
     },

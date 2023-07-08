@@ -11,7 +11,9 @@ export const useContractAddress = () => {
 			return contractAddresses.goerli
 		case chains.polygonMumbai.id:
 			return contractAddresses.mumbai
+		case chains.sepolia.id:
+			return contractAddresses.sepolia
 		default:
-			return ''
+			return contractAddresses.localhost
 	}
 }

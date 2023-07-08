@@ -54,6 +54,7 @@ export const useContract = (): UseContractResult => {
 		<T = unknown>(contract?: FairgroundType, hasSigner?: boolean) =>
 			async (options: UseContractOptions<T>) => {
 				const { callback, onError, onSuccess, successMessage, errorMessage } = options
+
 				if (contract) {
 					let failed = false
 					try {
@@ -95,7 +96,7 @@ export const useContract = (): UseContractResult => {
 					}
 				}
 			},
-		[toast],
+		[CONTRACT_ADDRESS, provider, signer, toast],
 	)
 
 	return {

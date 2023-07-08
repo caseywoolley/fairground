@@ -10,17 +10,20 @@ import React from 'react'
 
 const SEPOLIA_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_SEPOLIA_API_KEY || ''
 const GOERLI_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_GOERLI_API_KEY || ''
-const MAINNET_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_MAINNET_API_KEY || ''
 const MUMBAI_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI_API_KEY || ''
+const MAINNET_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_MAINNET_API_KEY || ''
+const POLYGON_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_API_KEY || ''
 const enableTestnets = process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
 const appName = 'Fairground'
 
 const { chains, provider, webSocketProvider } = configureChains(
-	[chain.mainnet, chain.polygon, ...(enableTestnets ? [chain.sepolia, chain.goerli, chain.polygonMumbai, chain.localhost] : [])],
+	[chain.mainnet, chain.polygon, ...(enableTestnets ? [chain.polygonMumbai, chain.sepolia, chain.goerli, chain.localhost] : [])],
 	[
 		alchemyProvider({ apiKey: SEPOLIA_API_KEY }),
 		alchemyProvider({ apiKey: GOERLI_API_KEY }),
 		alchemyProvider({ apiKey: MUMBAI_API_KEY }),
+		alchemyProvider({ apiKey: MUMBAI_API_KEY }),
+		alchemyProvider({ apiKey: POLYGON_API_KEY }),
 		alchemyProvider({ apiKey: MAINNET_API_KEY }),
 		jsonRpcProvider({
 			rpc: () => ({

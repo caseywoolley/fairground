@@ -9,12 +9,14 @@ export const Header: React.FC = () => {
 	return (
 		<header>
 			<Flex alignItems='center' pt={4} gridGap={12}>
-				<Flex alignItems='center' shrink='0'>
-					<Image src='/images/logo-fairground-wide.svg' alt='logo' width={200} display='inline-block' />
-					<Text as='span' fontSize='sm' pl={2} pb='0px' color='orange.400'>
-						beta
-					</Text>
-				</Flex>
+				<Link target='_blank' href='https://joinfairground.com' style={{ textDecoration: 'none' }}>
+					<Flex alignItems='center' shrink='0'>
+						<Image src='/images/logo-fairground-wide.svg' alt='logo' width={200} display='inline-block' />
+						<Text as='span' fontSize='sm' pl={2} pb='0px' color='orange.400'>
+							pre-alpha
+						</Text>
+					</Flex>
+				</Link>
 				<Link fontSize='sm' target='_blank' href='https://drive.google.com/file/d/1_636cLWhI-LZw_KYkIm6hjNDM8dZSsMn/view'>
 					White Paper
 				</Link>

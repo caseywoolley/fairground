@@ -18,7 +18,7 @@ export type PropertyProps = {
 	property: FairgroundProperty
 }
 
-const hoverZoom = css`
+export const propertyHoverZoom = css`
 	img {
 		transition: transform 0.5s ease-in-out;
 		transform-origin: center center;
@@ -35,13 +35,12 @@ export const Property: React.FC<PropertyProps> = ({ property }) => {
 	const { id, currentBid, auctionEnd, leaseEnd, owner, recordedOwner } = property
 	const isOwner = account.address === owner
 	const actionText = isOwner ? 'Set Reserve' : 'Place Bid'
-	// const imgSrc = `/images/concept${(Number(id) - 1) % 65}.jpg`
 	const imgSrc = useImageSrc(Number(id))
 	const expired = isExpired(auctionEnd) && isExpired(leaseEnd)
 
 	return (
 		<Bid owner={owner} propId={id}>
-			<Box css={hoverZoom} cursor='pointer' boxShadow='md' borderRadius='lg' overflow='hidden' onMouseEnter={setHovered.on} onMouseLeave={setHovered.off}>
+			<Box css={propertyHoverZoom} cursor='pointer' boxShadow='md' borderRadius='lg' overflow='hidden' onMouseEnter={setHovered.on} onMouseLeave={setHovered.off}>
 				<Box overflow='hidden'>
 					<Img objectFit='cover' src={imgSrc} alt='Property Thumbnail' />
 				</Box>
