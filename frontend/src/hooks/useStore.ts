@@ -7,26 +7,41 @@ type PaginationProps = {
 	page: number
 }
 
-type StoreModel = {
+type StoreValues = {
 	communityFunds: BigNumber | null
-	setCommunityFunds: (funds: BigNumber) => void
+	network: string | undefined
 	pagination: PaginationProps
+	properties: PropertyList
+	totalSupply: BigNumber | null
+}
+
+type StoreFunctions = {
+	setCommunityFunds: (funds: BigNumber) => void
+	setNetwork: (network: string | undefined) => void
 	setPaginationCount: (count: number) => void
 	setPaginationPage: (page: number) => void
-	properties: PropertyList
 	setProperties: (list: PropertyList) => void
-	totalSupply: BigNumber | null
 	setTotalSupply: (supply: BigNumber) => void
+	reset: () => void
+}
+
+type StoreModel = StoreValues & StoreFunctions
+
+export const defaultStore: StoreValues = {
+	communityFunds: null,
+	network: '',
+	pagination: { count: 10, page: 1 },
+	properties: [],
+	totalSupply: null,
 }
 
 export const useStore = create<StoreModel>((set) => ({
-	communityFunds: null,
-	setCommunityFunds: (communityFunds) => set(() => ({ communityFunds })),
-	pagination: { count: 10, page: 1 },
+	...defaultStore,
+	setCommunityFunds: (communityFunds) => set({ communityFunds }),
+	setNetwork: (network) => set({ network }),
 	setPaginationCount: (count) => set((store) => ({ pagination: { ...store.pagination, count } })),
 	setPaginationPage: (page) => set((store) => ({ pagination: { ...store.pagination, page } })),
-	properties: [],
-	setProperties: (properties) => set(() => ({ properties })),
-	totalSupply: null,
-	setTotalSupply: (totalSupply) => set(() => ({ totalSupply })),
+	setProperties: (properties) => set({ properties }),
+	setTotalSupply: (totalSupply) => set({ totalSupply }),
+	reset: () => set(defaultStore),
 }))

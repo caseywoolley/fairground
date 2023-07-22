@@ -29,6 +29,7 @@ export const Claim: React.FC<ClaimProps> = ({ currentBid, owner, propId, recorde
 	const isBuyer = isOwner && !isRecordedOwner
 	const isSeller = !isOwner && isRecordedOwner
 	const is3rdParty = !isOwner && !isRecordedOwner
+	const notClaimed = owner !== recordedOwner
 	const displayButton = isSeller || is3rdParty
 	const noFunds = Number(currentBid) === 0
 
@@ -40,7 +41,7 @@ export const Claim: React.FC<ClaimProps> = ({ currentBid, owner, propId, recorde
 		<Button size='xs' colorScheme='orange' onClick={handleClick} isLoading={loading}>
 			{isBuyer && 'Claim Property'}
 			{isSeller && 'Claim Funds'}
-			{is3rdParty && 'Activate'}
+			{is3rdParty && notClaimed && 'Activate'}
 		</Button>
 	)
 }

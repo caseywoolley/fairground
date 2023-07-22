@@ -11,9 +11,9 @@ export const Header: React.FC = () => {
 			<Flex alignItems='center' pt={4} gridGap={12}>
 				<Link target='_blank' href='https://joinfairground.com' style={{ textDecoration: 'none' }}>
 					<Flex alignItems='center' shrink='0'>
-						<Image src='/images/logo-fairground-wide.svg' alt='logo' width={200} display='inline-block' />
+						<Image src='/images/logo-fairground-wide.svg' alt='fairground-logo' width={200} display='inline-block' />
 						<Text as='span' fontSize='sm' pl={2} pb='0px' color='orange.400'>
-							pre-alpha
+							alpha
 						</Text>
 					</Flex>
 				</Link>

@@ -1,38 +1,35 @@
 import { Divider, Flex, Icon, IconButton, SimpleGrid, Text, useBoolean } from '@chakra-ui/react'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { Layout } from '@components/layout'
 import { DisplayEth, Pagination, PropertyDemo } from '@components'
 import { useCommunityFunds, usePropertyList, usePageRefresh, useStore, useTotalSupply, useIsHydrated, useOnUnmount } from '@hooks'
 import { Mint } from '@components/contract'
 import { Property } from '@components'
 import { MdRefresh } from 'react-icons/md'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 
 const Home: React.FC = () => {
 	const isHydrated = useIsHydrated()
 	const { isConnected } = useAccount()
-	const [active, setActive] = useBoolean(false)
-	const [refreshing, setRefreshing] = useBoolean(false)
+	const { chain } = useNetwork()
+	const network = useRef(chain?.network)
+
 	const pageRefresh = usePageRefresh()
+	const [refreshing, setRefreshing] = useBoolean(false)
+	const { pagination } = useStore((store) => store)
+
 	const community = useCommunityFunds()
 	const properties = usePropertyList()
 	const totalSupply = useTotalSupply()
-	const { pagination } = useStore((store) => store)
 
-	const demoProperties = [...Array(10).keys()].map((id) => ({ id: id + 1 }))
-
-	useOnUnmount(() => setActive.off)
+	const demoPropertyIds = [...Array(10).keys()].map((id) => ({ id: id + 1 }))
 
 	useEffect(() => {
-		if (isConnected && !active) {
-			setActive.on()
+		if (network.current !== chain?.network) {
+			network.current = chain?.network
 			pageRefresh()
 		}
-
-		if (!isConnected && active) {
-			setActive.off()
-		}
-	}, [isConnected, active, properties.list, pageRefresh, setActive, setActive.off, setActive.on])
+	}, [chain?.network, pageRefresh])
 
 	const handleRefresh = useCallback(() => {
 		pageRefresh()
@@ -77,7 +74,7 @@ const Home: React.FC = () => {
 			)}
 			<SimpleGrid mt={2} gridGap={2} templateColumns='repeat(auto-fill, minmax(300px, 1fr))'>
 				{isConnected && properties.list.map((property) => <Property key={Number(property.id)} property={property} />)}
-				{!isConnected && demoProperties.map((property) => <PropertyDemo key={Number(property.id)} property={property} />)}
+				{!isConnected && demoPropertyIds.map((property) => <PropertyDemo key={Number(property.id)} property={property} />)}
 			</SimpleGrid>
 		</Layout>
 	)
