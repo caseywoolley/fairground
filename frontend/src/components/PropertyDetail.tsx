@@ -5,7 +5,7 @@ import { HiBadgeCheck } from 'react-icons/hi'
 import { PropertyId } from './PropertyId'
 import { Claim } from '@components/contract/Claim'
 import { BigNumber } from 'ethers'
-import { useImageSrc, useOnMount, usePropertyDetail } from '@hooks'
+import { useRandomImage, useOnMount, usePropertyDetail } from '@hooks'
 import { useAccount } from 'wagmi'
 import { isExpired } from '@utils'
 
@@ -22,7 +22,7 @@ export const PropertyDetail: React.FC<PropertyDetailProps> = ({ propId }) => {
 	})
 
 	const { id, currentBid, auctionEnd, leaseEnd, owner, recordedOwner } = property.details ?? {}
-	const imgSrc = useImageSrc(Number(id))
+	const imgSrc = useRandomImage(Number(id))
 	const isOwner = account.address === owner
 	const expired = isExpired(auctionEnd ?? 0) && isExpired(leaseEnd ?? 0)
 

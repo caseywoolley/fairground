@@ -8,7 +8,6 @@ export const useContractAddress = () => {
 	const network = useStore((store) => store.network)
 
 	if (network !== chain?.network) {
-		console.log(chain?.network)
 		setNetwork(chain?.network)
 	}
 

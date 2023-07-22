@@ -2,7 +2,7 @@ import { Divider, Flex, Icon, IconButton, SimpleGrid, Text, useBoolean } from '@
 import React, { useCallback, useEffect, useRef } from 'react'
 import { Layout } from '@components/layout'
 import { DisplayEth, Pagination, PropertyDemo } from '@components'
-import { useCommunityFunds, usePropertyList, usePageRefresh, useStore, useTotalSupply, useIsHydrated, useOnUnmount } from '@hooks'
+import { useCommunityFunds, usePropertyList, usePageRefresh, useStore, useTotalSupply, useIsHydrated } from '@hooks'
 import { Mint } from '@components/contract'
 import { Property } from '@components'
 import { MdRefresh } from 'react-icons/md'

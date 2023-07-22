@@ -1,6 +1,6 @@
-import { Button, FormControl, FormErrorMessage, FormLabel, Icon, Input } from '@chakra-ui/react'
+import { Box, Button, FormControl, FormErrorMessage, FormLabel, Icon, Img, Input } from '@chakra-ui/react'
 import { BasicModal, PropertyId } from '@components'
-import { useMint, useTotalSupply } from '@hooks'
+import { useRandomImage, useMint, useTotalSupply } from '@hooks'
 import { isAddress } from 'ethers/lib/utils'
 import React, { ChangeEvent, useCallback, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
@@ -23,6 +23,8 @@ export const Mint: React.FC = () => {
 		setMintTo(e.target?.value)
 	}, [])
 
+	const imgSrc = useRandomImage(Number(totalSupply.count) + 1)
+
 	return (
 		<BasicModal
 			closeAfter={loading}
@@ -40,6 +42,9 @@ export const Mint: React.FC = () => {
 				</Button>
 			}>
 			<FormControl isInvalid={isInvalid}>
+				<Box overflow='hidden' pb={2}>
+					<Img objectFit='cover' src={imgSrc} alt='Property Thumbnail' />
+				</Box>
 				<FormLabel>Owner</FormLabel>
 				<Input maxLength={42} isInvalid={isInvalid} type='text' onChange={handleChange} value={mintTo} placeholder={'Wallet address'} />
 				{!isAddress(mintTo) && <FormErrorMessage>Invalid wallet address</FormErrorMessage>}

@@ -1,7 +1,7 @@
 import { Box, Text, Flex, Stack, useBoolean, SlideFade, Fade, Img } from '@chakra-ui/react'
 import React from 'react'
 import { PropertyId } from './PropertyId'
-import { useImageSrc } from '@hooks'
+import { useRandomImage } from '@hooks'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { propertyHoverZoom } from './Property'
 
@@ -12,7 +12,7 @@ export type PropertyDemoProps = {
 export const PropertyDemo: React.FC<PropertyDemoProps> = ({ property }) => {
 	const [hovered, setHovered] = useBoolean()
 	const { id } = property
-	const imgSrc = useImageSrc(Number(id))
+	const imgSrc = useRandomImage(Number(id))
 
 	const { openConnectModal } = useConnectModal()
 

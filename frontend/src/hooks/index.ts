@@ -1,6 +1,6 @@
 export * from './contract'
 export * from './useContractAddress'
-export * from './useImageSrc'
+export * from './useRandomImage'
 export * from './useIsHydrated'
 export * from './useOnMount'
 export * from './useOnUnmount'
