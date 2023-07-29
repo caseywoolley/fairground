@@ -22,7 +22,7 @@ const Home: React.FC = () => {
 	const properties = usePropertyList()
 	const totalSupply = useTotalSupply()
 
-	const demoPropertyIds = [...Array(10).keys()].map((id) => ({ id: id + 1 }))
+	const demoPropertyIds = [...Array(10).keys()].map((id) => ({ id: id + 1 })).reverse()
 
 	useEffect(() => {
 		if (network.current !== chain?.network) {

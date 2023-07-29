@@ -185,16 +185,15 @@ contract Fairground {
         uint256 pageSize
     ) external view returns (PropertyDetails[] memory) {
         require(_tokenIdCounter.current() > 0, "No properties found");
-        uint256 start = (pageNumber - 1) * pageSize;
-        require(start <= _tokenIdCounter.current() - 1, "Out of range");
-        uint256 count = (start + pageSize) <= _tokenIdCounter.current()
-            ? pageSize
-            : _tokenIdCounter.current() - start;
+        uint256 pageOffset = (pageNumber - 1) * pageSize;
+        require(_tokenIdCounter.current() > pageOffset, "Out of range");
+        uint256 start = _tokenIdCounter.current() - pageOffset;
+        uint256 count = start >= pageSize ? pageSize : start;
 
         PropertyDetails[] memory listings = new PropertyDetails[](count);
 
         for (uint256 i = 0; i < count; i++) {
-            listings[i] = propertyDetail(start + i + 1);
+            listings[i] = propertyDetail(start - i);
         }
 
         return listings;
