@@ -1,7 +1,7 @@
 import { Divider, Flex, Icon, IconButton, SimpleGrid, Text, useBoolean } from '@chakra-ui/react'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { Layout } from '@components/layout'
-import { DisplayEth, Pagination, PropertyDemo } from '@components'
+import { DisplayCurrency, Pagination, PropertyDemo } from '@components'
 import { useCommunityFunds, usePropertyList, usePageRefresh, useStore, useTotalSupply, useIsHydrated } from '@hooks'
 import { Mint } from '@components/contract'
 import { Property } from '@components'
@@ -58,7 +58,7 @@ const Home: React.FC = () => {
 						<Flex gridGap={2} alignItems='center'>
 							<Mint />
 							<IconButton isLoading={refreshing} onClick={handleRefresh} aria-label='refresh' icon={<Icon as={MdRefresh} w={6} h={6} />} />
-							{Boolean(totalSupply.count) && (
+							{Boolean(Number(totalSupply.count)) && (
 								<Text pl={5} color='gray.500'>
 									{propertyRange}
 								</Text>
@@ -66,7 +66,7 @@ const Home: React.FC = () => {
 						</Flex>
 						<Flex gridGap={2} alignItems='center'>
 							{Boolean(community.funds) && <Text fontSize='lg'>Community Funds</Text>}
-							<DisplayEth value={community.funds} />
+							<DisplayCurrency value={community.funds} />
 						</Flex>
 						<Pagination max={pageMax} />
 					</Flex>

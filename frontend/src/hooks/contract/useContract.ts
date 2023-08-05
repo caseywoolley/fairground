@@ -96,7 +96,7 @@ export const useContract = (): UseContractResult => {
 					}
 				}
 			},
-		[CONTRACT_ADDRESS, provider, signer, toast],
+		[toast],
 	)
 
 	return {

@@ -1,6 +1,37 @@
 import * as contractAddresses from 'artifacts/contracts/contractAddresses'
 import { useNetwork, chain as chains } from 'wagmi'
 import { useStore } from './useStore'
+import { FaEthereum } from 'react-icons/fa'
+import { PolygonMaticLogo } from '@components/PolygonMaticLogo'
+
+const ethNetwork = {
+	symbol: FaEthereum,
+	unit: 'eth',
+}
+
+const polygonNetwork = {
+	symbol: PolygonMaticLogo,
+	unit: 'matic',
+}
+
+export const networkMapping = {
+	[chains.localhost.id]: {
+		...ethNetwork,
+		address: contractAddresses.localhost,
+	},
+	[chains.sepolia.id]: {
+		...ethNetwork,
+		address: contractAddresses.sepolia,
+	},
+	[chains.polygon.id]: {
+		...polygonNetwork,
+		address: contractAddresses.mumbai,
+	},
+	[chains.polygonMumbai.id]: {
+		...polygonNetwork,
+		address: contractAddresses.mumbai,
+	},
+}
 
 export const useContractAddress = () => {
 	const { chain } = useNetwork()
@@ -11,14 +42,5 @@ export const useContractAddress = () => {
 		setNetwork(chain?.network)
 	}
 
-	switch (chain?.id) {
-		case chains.localhost.id:
-			return contractAddresses.localhost
-		case chains.polygonMumbai.id:
-			return contractAddresses.mumbai
-		case chains.sepolia.id:
-			return contractAddresses.sepolia
-		default:
-			return ''
-	}
+	return chain?.id ? networkMapping[chain?.id]?.address ?? '' : ''
 }

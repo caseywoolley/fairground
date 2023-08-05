@@ -1,5 +1,5 @@
 import { Box, Flex, Stack, Icon, Tooltip, Img, Skeleton } from '@chakra-ui/react'
-import { DisplayEth } from './DisplayEth'
+import { DisplayCurrency } from './DisplayCurrency'
 import { StatusBadge } from './StatusBadge'
 import { HiBadgeCheck } from 'react-icons/hi'
 import { PropertyId } from './PropertyId'
@@ -51,7 +51,7 @@ export const PropertyDetail: React.FC<PropertyDetailProps> = ({ propId }) => {
 							currentBid={currentBid as BigNumber}
 							isExpired={expired}></Claim>
 					</Stack>
-					<DisplayEth value={currentBid} />
+					<DisplayCurrency value={currentBid} />
 				</Flex>
 				<StatusBadge property={property.details} />
 			</Box>

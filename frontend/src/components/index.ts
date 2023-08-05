@@ -1,4 +1,5 @@
 export * from './StatusBadge'
+export * from './DisplayCurrency'
 export * from './DisplayEth'
 export * from './DisplayOrFallback'
 export * from './IconLink'

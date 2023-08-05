@@ -14,6 +14,7 @@ export enum DeployNetwork {
   Mumbai = 'mumbai',
   Polygon = 'polygon',
   Sepolia = 'sepolia',
+  Mainnet = 'mainnet',
 }
 
 export enum TokenSymbol {
@@ -30,6 +31,7 @@ export const networkSymbol = {
   [DeployNetwork.Mumbai]: TokenSymbol.MUMATIC,
   [DeployNetwork.Polygon]: TokenSymbol.MATIC,
   [DeployNetwork.Sepolia]: TokenSymbol.SETH,
+  [DeployNetwork.Mainnet]: TokenSymbol.ETH,
 }
 
 export type DeployContractOptions = {

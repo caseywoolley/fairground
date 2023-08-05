@@ -2,7 +2,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { lightTheme, getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
 import type { AppProps } from 'next/app'
-import { mainnet, polygon, polygonMumbai, sepolia, localhost } from 'wagmi/chains'
+import { polygon, polygonMumbai, sepolia, localhost } from 'wagmi/chains'
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
@@ -11,15 +11,13 @@ import React from 'react'
 
 const SEPOLIA_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_SEPOLIA_API_KEY || ''
 const MUMBAI_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI_API_KEY || ''
-const MAINNET_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_MAINNET_API_KEY || ''
 const POLYGON_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_API_KEY || ''
 const enableTestnets = process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
 const appName = 'Fairground'
 
 const { chains, provider } = configureChains(
-	[mainnet, polygon, ...(enableTestnets ? [sepolia, polygonMumbai, localhost] : [])],
+	[polygon, ...(enableTestnets ? [sepolia, polygonMumbai, localhost] : [])],
 	[
-		alchemyProvider({ apiKey: MAINNET_API_KEY }),
 		alchemyProvider({ apiKey: POLYGON_API_KEY }),
 		alchemyProvider({ apiKey: MUMBAI_API_KEY }),
 		jsonRpcProvider({
@@ -39,7 +37,7 @@ const { chains, provider } = configureChains(
 const { connectors } = getDefaultWallets({ appName, chains })
 
 const wagmiClient = createClient({
-	// autoConnect: true,
+	autoConnect: true,
 	connectors,
 	provider,
 })

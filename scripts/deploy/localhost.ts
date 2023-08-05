@@ -15,5 +15,4 @@ deployContract({
   network: DeployNetwork.Localhost,
   budget: 1,
   customCode,
-  testRun: false
 });

@@ -1,7 +1,7 @@
 import { Box, Text, Flex, Stack, useBoolean, SlideFade, Fade, Icon, Tooltip, Img } from '@chakra-ui/react'
 import { Fairground } from 'typechain'
 import React from 'react'
-import { DisplayEth } from './DisplayEth'
+import { DisplayCurrency } from './DisplayCurrency'
 import { Bid } from '@components/contract/Bid'
 import { StatusBadge } from './StatusBadge'
 import { css } from '@emotion/react'
@@ -55,7 +55,7 @@ export const Property: React.FC<PropertyProps> = ({ property }) => {
 							)}
 							<Claim owner={owner} recordedOwner={recordedOwner} propId={id} currentBid={currentBid} isExpired={expired}></Claim>
 						</Stack>
-						<DisplayEth value={currentBid} />
+						<DisplayCurrency value={currentBid} />
 					</Flex>
 					<Fade in={!hovered}>
 						<Box position='absolute'>
