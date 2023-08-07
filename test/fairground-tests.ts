@@ -63,11 +63,11 @@ describe('Fairground', () => {
             await fairground.mint(addr1.address);
         });
 
-        it('Should return a list of properties', async () => {
+        it('Should return a list of properties in descending order', async () => {
             const properties = await fairground.propertyList(1, 5);
 
             expect(properties.length).to.equal(5);
-            expect(properties[0].id).to.equal(1);
+            expect(properties[0].id).to.equal(5);
             expect(properties[1].owner).to.equal(addr1.address);
         });
 
@@ -82,15 +82,15 @@ describe('Fairground', () => {
 
             expect(properties.length).to.equal(2);
             expect(properties[0].id).to.equal(3);
-            expect(properties[1].id).to.equal(4);
+            expect(properties[1].id).to.equal(2);
         });
 
         it('Should return partial pages when count is larger than remaining', async () => {
             const properties = await fairground.propertyList(2, 3);
 
             expect(properties.length).to.equal(2);
-            expect(properties[0].id).to.equal(4);
-            expect(properties[1].id).to.equal(5);
+            expect(properties[0].id).to.equal(2);
+            expect(properties[1].id).to.equal(1);
         });
 
         it('Should revert when selection is out of range', async () => {

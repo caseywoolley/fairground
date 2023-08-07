@@ -10,9 +10,10 @@ const version = '0.0.2'
 const versionDescription = (
 	<section>
 		<div>{`Fairground v${version} (Proof of Concept)`}</div>
+		<div>- Placeholder property images</div>
 		<div>For testing purposes:</div>
-		<div>30 day auction = 3 minutes</div>
-		<div>1 year lease = 10 minutes</div>
+		<div>- 30 day auction = 3 minutes</div>
+		<div>- 1 year lease = 10 minutes</div>
 	</section>
 )
 
