@@ -1,6 +1,5 @@
-import { Box, Text, Flex, Stack, useBoolean, SlideFade, Fade, Img } from '@chakra-ui/react'
+import { Box, Text, useBoolean, SlideFade, Fade, Img } from '@chakra-ui/react'
 import React from 'react'
-import { PropertyId } from './PropertyId'
 import { useRandomImage } from '@hooks'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { propertyHoverZoom } from './Property'
@@ -30,7 +29,7 @@ export const PropertyDemo: React.FC<PropertyDemoProps> = ({ property }) => {
 				<SlideFade in={hovered} style={{ zIndex: 10 }}>
 					<Box p={1} color='white' bg='orange.500'>
 						<Text textAlign='center' fontSize='sm'>
-							Connect To Place Bids
+							Connect Wallet
 						</Text>
 					</Box>
 				</SlideFade>

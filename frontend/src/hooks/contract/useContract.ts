@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Fairground as FairgroundType } from 'typechain'
 import Fairground from 'artifacts/contracts/Fairground.sol/Fairground.json'
 import { useToast, UseToastOptions } from '@chakra-ui/react'
@@ -99,9 +99,12 @@ export const useContract = (): UseContractResult => {
 		[toast],
 	)
 
+	const callContractOnly = useMemo(() => callContract(contract), [callContract, contract])
+	const callContractWithSigner = useMemo(() => callContract(contractWithSigner, true), [callContract, contractWithSigner])
+
 	return {
-		callContract: callContract(contract),
-		callContractWithSigner: callContract(contractWithSigner, true),
+		callContract: callContractOnly,
+		callContractWithSigner,
 		loading,
 	}
 }
