@@ -1,9 +1,9 @@
 import { Button, FormControl, Input, Tooltip } from '@chakra-ui/react'
 import { BasicModal, PropertyDetail } from '@components'
-import { useIncreaseReserve, usePlaceBid, usePropertyDetail } from '@hooks'
+import { networkMapping, useIncreaseReserve, usePlaceBid, usePropertyDetail } from '@hooks'
 import { BigNumber, ethers } from 'ethers'
 import React, { useCallback, useState } from 'react'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 
 export type BidProps = {
 	children: React.ReactNode
@@ -13,6 +13,7 @@ export type BidProps = {
 
 export const Bid: React.FC<BidProps> = ({ children, owner, propId }) => {
 	const account = useAccount()
+	const { chain } = useNetwork()
 	const [bidAmount, setBidAmount] = useState<BigNumber>()
 	const property = usePropertyDetail(propId)
 	const { loading: loadingBid, placeBid } = usePlaceBid()
@@ -34,6 +35,7 @@ export const Bid: React.FC<BidProps> = ({ children, owner, propId }) => {
 	const isOwner = account.address === owner
 	const actionText = isOwner ? 'Set Reserve' : 'Place Bid'
 	const bidTooltip = `${isOwner ? 'Reserve' : 'Bid'} too low`
+	const currencySymbol = networkMapping[chain?.id ?? 1].unit.toUpperCase()
 
 	return (
 		<>
@@ -53,7 +55,7 @@ export const Bid: React.FC<BidProps> = ({ children, owner, propId }) => {
 					<Input
 						mb={2}
 						type='number'
-						placeholder='ETH'
+						placeholder={currencySymbol}
 						onChange={(e) => {
 							if (isFinite(parseFloat(String(e.target.value)))) {
 								setBidAmount(ethers.utils.parseEther(e.target.value))

@@ -4,7 +4,6 @@ import { commify, formatUnits } from 'ethers/lib/utils'
 import React from 'react'
 import { FaEthereum } from 'react-icons/fa'
 import { useNetwork } from 'wagmi'
-import { PolygonMaticLogo } from './PolygonMaticLogo'
 import { networkMapping } from '@hooks'
 
 export type DisplayCurrencyProps = TextProps & {
@@ -30,7 +29,6 @@ const getUnit = (num: BigNumber, precision: number) => {
 
 export const DisplayCurrency: React.FC<DisplayCurrencyProps> = ({ value, precision = 3, iconSize = 4, ...textProps }) => {
 	const { chain } = useNetwork()
-	const isEth = chain?.id === 1
 
 	if (value === undefined || value === null) {
 		return null
@@ -41,7 +39,7 @@ export const DisplayCurrency: React.FC<DisplayCurrencyProps> = ({ value, precisi
 	const displayFractional = Number(fractionalValue) > 0 ? `.${fractionalValue?.slice(0, precision)}` : ''
 	const displayValue = commify(`${wholeValue}${displayFractional}`)
 
-	const currencySymbol = chain?.id ? networkMapping[chain.id].symbol ?? FaEthereum : FaEthereum
+	const currencySymbol = chain?.id ? networkMapping[chain.id]?.symbol ?? FaEthereum : FaEthereum
 	const baseUnit = chain?.id ? networkMapping[chain.id].unit ?? 'eth' : 'eth'
 	const unitName = isBaseUnit ? baseUnit : unit
 
