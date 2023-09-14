@@ -35,7 +35,7 @@ export const Bid: React.FC<BidProps> = ({ children, owner, propId }) => {
 	const isOwner = account.address === owner
 	const actionText = isOwner ? 'Set Reserve' : 'Place Bid'
 	const bidTooltip = `${isOwner ? 'Reserve' : 'Bid'} too low`
-	const currencySymbol = networkMapping[chain?.id ?? 1].unit.toUpperCase()
+	const currencySymbol = networkMapping[chain?.id ?? 1]?.unit.toUpperCase()
 
 	return (
 		<>

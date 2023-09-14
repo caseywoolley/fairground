@@ -40,7 +40,7 @@ export const DisplayCurrency: React.FC<DisplayCurrencyProps> = ({ value, precisi
 	const displayValue = commify(`${wholeValue}${displayFractional}`)
 
 	const currencySymbol = chain?.id ? networkMapping[chain.id]?.symbol ?? FaEthereum : FaEthereum
-	const baseUnit = chain?.id ? networkMapping[chain.id].unit ?? 'eth' : 'eth'
+	const baseUnit = chain?.id ? networkMapping[chain.id]?.unit ?? 'eth' : 'eth'
 	const unitName = isBaseUnit ? baseUnit : unit
 
 	return (
