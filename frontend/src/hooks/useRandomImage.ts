@@ -32,8 +32,8 @@ export const useRandomImage = (id: number) => {
 		const index = wrapNumberInRange(id - 1, 0, IMAGE_COUNT)
 		const imgId = randomArray[index]
 
-		return `/images/concept/concept${imgId}.jpeg`
+		return `/images/thumbnails/concept${imgId}.jpg`
 	}, [id, randomArray])
 
-	return url ?? '/images/1024x1024.png'
+	return url
 }

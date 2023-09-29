@@ -1,4 +1,4 @@
-import { Box, Text, Flex, Stack, useBoolean, SlideFade, Fade, Icon, Tooltip, Img } from '@chakra-ui/react'
+import { Box, Text, Flex, Stack, useBoolean, SlideFade, Fade, Icon, Tooltip, Image, AspectRatio } from '@chakra-ui/react'
 import { Fairground } from 'typechain'
 import React from 'react'
 import { DisplayCurrency } from './DisplayCurrency'
@@ -42,7 +42,9 @@ export const Property: React.FC<PropertyProps> = ({ property }) => {
 		<Bid owner={owner} propId={id}>
 			<Box css={propertyHoverZoom} cursor='pointer' boxShadow='md' borderRadius='lg' overflow='hidden' onMouseEnter={setHovered.on} onMouseLeave={setHovered.off}>
 				<Box overflow='hidden'>
-					<Img objectFit='cover' src={imgSrc} alt='Property Thumbnail' />
+					<AspectRatio ratio={1}>
+						<Image objectFit='cover' w='100%' src={imgSrc} fallbackSrc='/images/1024x1024.png' alt='Property Thumbnail' />
+					</AspectRatio>
 				</Box>
 				<Box m={2}>
 					<Flex justifyContent='space-between' alignItems='center'>

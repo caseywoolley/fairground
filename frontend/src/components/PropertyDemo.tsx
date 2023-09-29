@@ -1,4 +1,4 @@
-import { Box, Text, useBoolean, SlideFade, Fade, Img } from '@chakra-ui/react'
+import { Box, Text, useBoolean, SlideFade, Fade, Image, AspectRatio } from '@chakra-ui/react'
 import React from 'react'
 import { useRandomImage } from '@hooks'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
@@ -19,7 +19,9 @@ export const PropertyDemo: React.FC<PropertyDemoProps> = ({ property }) => {
 		<div onClick={openConnectModal}>
 			<Box css={propertyHoverZoom} cursor='pointer' boxShadow='md' borderRadius='lg' overflow='hidden' onMouseEnter={setHovered.on} onMouseLeave={setHovered.off}>
 				<Box overflow='hidden'>
-					<Img objectFit='cover' src={imgSrc} alt='Property Thumbnail' />
+					<AspectRatio ratio={1}>
+						<Image objectFit='cover' w='100%' src={imgSrc} fallbackSrc='/images/1024x1024.png' alt='Property Thumbnail' />
+					</AspectRatio>
 				</Box>
 				<Box m={2}>
 					<Fade in={!hovered}>

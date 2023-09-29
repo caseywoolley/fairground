@@ -1,4 +1,4 @@
-import { Box, Flex, Stack, Icon, Tooltip, Img, Skeleton } from '@chakra-ui/react'
+import { Box, Flex, Stack, Icon, Tooltip, Image, Skeleton, AspectRatio } from '@chakra-ui/react'
 import { DisplayCurrency } from './DisplayCurrency'
 import { StatusBadge } from './StatusBadge'
 import { HiBadgeCheck } from 'react-icons/hi'
@@ -33,7 +33,9 @@ export const PropertyDetail: React.FC<PropertyDetailProps> = ({ propId }) => {
 	return (
 		<Box>
 			<Box overflow='hidden'>
-				<Img objectFit='cover' src={imgSrc} alt='Property Thumbnail' />
+				<AspectRatio ratio={1}>
+					<Image objectFit='cover' src={imgSrc} alt='Property Thumbnail' />
+				</AspectRatio>
 			</Box>
 			<Box m={2}>
 				<Flex justifyContent='space-between' alignItems='center'>

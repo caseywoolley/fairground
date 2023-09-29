@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, Icon, Img, Input } from '@chakra-ui/react'
+import { AspectRatio, Box, Button, FormControl, FormErrorMessage, FormLabel, Icon, Image, Input } from '@chakra-ui/react'
 import { BasicModal, PropertyId } from '@components'
 import { useRandomImage, useMint, useTotalSupply } from '@hooks'
 import { isAddress } from 'ethers/lib/utils'
@@ -43,7 +43,9 @@ export const Mint: React.FC = () => {
 			}>
 			<FormControl isInvalid={isInvalid}>
 				<Box overflow='hidden' pb={2}>
-					<Img objectFit='cover' src={imgSrc} alt='Property Thumbnail' />
+					<AspectRatio ratio={1}>
+						<Image objectFit='cover' src={imgSrc} fallbackSrc='/images/1024x1024.png' alt='Property Thumbnail' />
+					</AspectRatio>
 				</Box>
 				<FormLabel>Owner</FormLabel>
 				<Input maxLength={42} isInvalid={isInvalid} type='text' onChange={handleChange} value={mintTo} placeholder={'Wallet address'} />
