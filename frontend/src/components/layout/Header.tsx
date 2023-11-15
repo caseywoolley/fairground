@@ -31,7 +31,7 @@ export const Header: React.FC = () => {
 						</Tooltip>
 					</Flex>
 				</Link>
-				<Link fontSize='sm' target='_blank' href='https://drive.google.com/file/d/1_636cLWhI-LZw_KYkIm6hjNDM8dZSsMn/view'>
+				<Link fontSize='sm' target='_blank' href='https://www.joinfairground.com/whitepaper/'>
 					White Paper
 				</Link>
 				<Link fontSize='sm' target='_blank' href='https://joinfairground.com'>
